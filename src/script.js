@@ -26,6 +26,13 @@ const canvas = document.querySelector('canvas.webgl');
 
 
 
+/**
+ * Fog
+ */
+const fog = new THREE.Fog(0x262837,1,15);
+scene.fog = fog;
+
+
 /**Renderer
  * 
  */
@@ -36,6 +43,7 @@ const webGLRenderer = new THREE.WebGLRenderer({
 const updateRender = () => {
     webGLRenderer.setSize(size.width, size.height);
     webGLRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    webGLRenderer.setClearColor(0x262837);
 }
 updateRender();
 
@@ -70,7 +78,23 @@ const doorRoughnessTexture = textureLoader.load('textures/door/roughness.jpg');
 const grassNormalTexture = textureLoader.load('textures/grass/normal.jpg');
 const grassColorTexture = textureLoader.load('textures/grass/color.jpg');
 const grassRoughnessTexture = textureLoader.load('textures/grass/roughness.jpg');
-const grassAmbientOcclusion = textureLoader.load('textures/grass/ambientOcclusion.jpg');
+const grassAmbientOcclusionTexture = textureLoader.load('textures/grass/ambientOcclusion.jpg');
+
+grassNormalTexture.repeat.set(8,8);
+grassColorTexture.repeat.set(8,8);
+grassRoughnessTexture.repeat.set(8,8);
+grassAmbientOcclusionTexture.repeat.set(8,8);
+
+
+grassNormalTexture.wrapS = THREE.RepeatWrapping;
+grassColorTexture.wrapS = THREE.RepeatWrapping;
+grassRoughnessTexture.wrapS = THREE.RepeatWrapping;
+grassAmbientOcclusionTexture.wrapS = THREE.RepeatWrapping;
+
+grassNormalTexture.wrapT = THREE.RepeatWrapping;
+grassColorTexture.wrapT = THREE.RepeatWrapping;
+grassRoughnessTexture.wrapT = THREE.RepeatWrapping;
+grassAmbientOcclusionTexture.wrapT = THREE.RepeatWrapping;
 
 
 // Bricks textures
@@ -120,7 +144,7 @@ house.add(roof);
 
 // Door
 const door = new THREE.Mesh(
-    new THREE.PlaneGeometry(2, 2),
+    new THREE.PlaneGeometry(2.2, 2.2, 100, 100),
     new THREE.MeshStandardMaterial({
         transparent: true,
         map: doorColorTexture,
@@ -132,6 +156,10 @@ const door = new THREE.Mesh(
         alphaMap: doorAlphaTexture,
         displacementScale: 0.1
     })
+);
+door.geometry.setAttribute(
+    'uv2',
+    new THREE.Float32BufferAttribute(door.geometry.attributes.uv.array, 2)
 );
 door.position.z = 2.001;
 door.position.y = .95;
@@ -200,10 +228,14 @@ const floor = new THREE.Mesh(
         color: 0xa9c386,
         transparent: true,
         map: grassColorTexture,
-        aoMap: grassAmbientOcclusion,
+        aoMap: grassAmbientOcclusionTexture,
         normalMap: grassNormalTexture,
         roughnessMap: grassRoughnessTexture
     })
+);
+floor.geometry.setAttribute(
+    'uv2',
+    new THREE.Float32BufferAttribute(door.geometry.attributes.uv.array, 2)
 );
 floor.rotation.x = -Math.PI * 0.5;
 floor.position.y = 0;
@@ -214,13 +246,16 @@ scene.add(floor);
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+const ambientLight = new THREE.AmbientLight(0xb9d5ff, 0.12);
 scene.add(ambientLight);
 
-const moonLight = new THREE.DirectionalLight(0xffffff, 0.5);
+const moonLight = new THREE.DirectionalLight(0xb9d5ff, 0.12);
 moonLight.position.set(4, 5, - 2);
 scene.add(moonLight);
 
+const doorLight = new THREE.PointLight(0xff7d46, 1,7);
+doorLight.position.set(0,2.2, 2.7);
+house.add(doorLight);
 
 
 /**
@@ -281,3 +316,8 @@ gui.add(moonLight, 'intensity').min(0).max(1).step(0.001).name('Moonlight Intens
 gui.add(moonLight.position, 'x').min(- 5).max(5).step(0.001).name('Moonlight Position-X');
 gui.add(moonLight.position, 'y').min(- 5).max(5).step(0.001).name('Moonlight Position-Y');
 gui.add(moonLight.position, 'z').min(- 5).max(5).step(0.001).name('Moonlight Position-Z');
+
+// Fog
+gui.addColor(fog, 'color').name('Fog Color');
+gui.add(fog, 'near').min(1).max(15).step(0.001).name('Fog: Near');
+gui.add(fog, 'far').min(1).max(30).step(0.001).name('Fog: Far');
