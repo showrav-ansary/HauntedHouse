@@ -55,7 +55,7 @@ const doorNormalTexture = textureLoader.load('textures/door/normal.jpg');
 // wall
 const wallColorTexture = textureLoader.load('textures/wall/color.jpg');
 const wallAmbientOcclusionTexture = textureLoader.load('textures/wall/ambientOcclusion.jpg');
-//const wallDisplacementTexture = textureLoader.load('textures/wall/displacement.png'); // causes missing plane
+const wallDisplacementTexture = textureLoader.load('textures/wall/displacement.png'); 
 const wallRoughnessTexture = textureLoader.load('textures/wall/roughness.jpg');
 const wallNormalTexture = textureLoader.load('textures/wall/normal.jpg');
 
@@ -74,6 +74,25 @@ const roofAmbientOcclusionTexture = textureLoader.load('textures/roof/ambientOcc
 const roofDisplacementTexture = textureLoader.load('textures/roof/displacement.png');
 const roofRoughnessTexture = textureLoader.load('textures/roof/roughness.jpg');
 const roofNormalTexture = textureLoader.load('textures/roof/normal.jpg');
+
+roofColorTexture.repeat.set(8,1);
+roofAmbientOcclusionTexture.repeat.set(8,1);
+roofDisplacementTexture.repeat.set(8,1);
+roofNormalTexture.repeat.set(8,1);
+roofRoughnessTexture.repeat.set(8,1);
+
+roofColorTexture.wrapS = THREE.RepeatWrapping;
+roofAmbientOcclusionTexture.wrapS = THREE.RepeatWrapping;
+roofDisplacementTexture.wrapS = THREE.RepeatWrapping;
+roofNormalTexture.wrapS = THREE.RepeatWrapping;
+roofRoughnessTexture.wrapS = THREE.RepeatWrapping;
+
+roofColorTexture.wrapT = THREE.RepeatWrapping;
+roofAmbientOcclusionTexture.wrapT = THREE.RepeatWrapping;
+roofDisplacementTexture.wrapT = THREE.RepeatWrapping;
+roofNormalTexture.wrapT = THREE.RepeatWrapping;
+roofRoughnessTexture.wrapT = THREE.RepeatWrapping;
+
 
 // floor
 const floorColorTexture = textureLoader.load('textures/floor/color.jpg');
