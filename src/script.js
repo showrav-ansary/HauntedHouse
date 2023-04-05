@@ -164,7 +164,7 @@ const roofMaterial = new THREE.MeshStandardMaterial({
     aoMap: roofAmbientOcclusionTexture,
     normalMap: roofNormalTexture,
     roughness: roofRoughnessTexture,
-    displacementMap: roofDisplacementTexture,
+    displacementMap: roofDisplacementTexture
 });
 const roof = new THREE.Mesh(roofGeometry, roofMaterial);
 roof.geometry.setAttribute(
